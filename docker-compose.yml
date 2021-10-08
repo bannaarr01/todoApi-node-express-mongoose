@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:5.0.2
+    restart: unless-stopped
+    ports:
+      - 27017
+    volumes:
+      - db:/usr/local/var/mongodb
+  app:
+    depends_on:
+      - mongodb
+    build: .
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      - DB_HOST=mongodb
+      - DB_NAME=todoappdb
+      - DB_PORT=27017
+    stdin_open: true
+    tty: true
+
+volumes:
+  db:
+
+# # services:
+# #   app:
+# #     container_name: docker-node-mongo
+# #     restart: always
+# #     build: .
+# #     ports:
+# #       - '80:3000'
+# #     links:
+# #       - mongo
+# #   mongo:
+# #     container_name: mongo
+# #     image: mongo
+# #     ports:
+# #       - '27017:27017'
